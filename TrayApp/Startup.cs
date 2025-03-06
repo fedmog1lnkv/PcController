@@ -1,7 +1,7 @@
 using Application.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
+using TrayApp.BackgroundServices;
 
 namespace TrayApp;
 
@@ -9,13 +9,17 @@ public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton<Settings>();
+        services.AddSingleton<ApplicationService>();
         services.AddScoped<MediaService>();
-        services.AddControllers();
-    }
+        services.AddScoped<VolumeService>();
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-        app.UseRouting();
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        services.AddHostedService<VolumeBackgroundService>();
+
+        services.AddControllers();
+        services.AddSignalR();
+        
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
     }
 }

@@ -60,7 +60,7 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-app.MapHub<VolumeHub>("/volumeHub");
+app.MapHub<VolumeHub>("/hub");
 
 app.UseStaticFiles(
     new StaticFileOptions

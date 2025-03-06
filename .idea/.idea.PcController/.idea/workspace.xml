@@ -9,17 +9,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af927940-c7a5-4a7b-90ad-869d8ac8f459" name="Changes" comment="feat: implement media control endpoints">
-      <change afterPath="$PROJECT_DIR$/TrayApp/Controllers/Application/ApplicationController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/Controllers/Application/Models/StartApplicationDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/Controllers/Media/MediaController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/Controllers/Volume/Models/VolumeDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/Controllers/Volume/VolumeController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/MainWindow.xaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/MainWindow.xaml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/Startup.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/TrayApp.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TrayApp/appsettings.json" afterDir="false" />
+    <list default="true" id="af927940-c7a5-4a7b-90ad-869d8ac8f459" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/TrayApp/BackgroundServices/VolumeBackgroundService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TrayApp/Hubs/MainHub.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PcController/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PcController/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Api/Api.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Api/Api.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Api/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Api/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TrayApp/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TrayApp/App.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TrayApp/Startup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TrayApp/Startup.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +56,6 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5878b640eb2e4721b662351b309520b8cef938/fe/885d29ad/NativeWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9a00b514f1a941dd9f060453de7f7c4043200/c0/69ee278b/Profile.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4c192aa6dafb8d276af3550bdd68428bd01e63aabade742b412f9e664dd4a/SwaggerUIBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/kuzne/Documents/work/PcController/Application/Services/MediaService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TrayApp/App.xaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TrayApp/App.xaml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TrayApp/AssemblyInfo.cs" root0="FORCE_HIGHLIGHTING" />
@@ -91,7 +88,7 @@
     "Docker.compose.yaml: Compose Deployment.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "settings.editor.selected.configurable": "com.github.copilot.settings.ApplicationConfigurable"
   }
 }]]></component>
   <component name="RunManager" selected=".NET Project.App">
@@ -177,7 +174,9 @@
       <workItem from="1740977118925" duration="2220000" />
       <workItem from="1741015507642" duration="86000" />
       <workItem from="1741190997423" duration="780000" />
-      <workItem from="1741191815540" duration="3586000" />
+      <workItem from="1741191815540" duration="3736000" />
+      <workItem from="1741195804501" duration="135000" />
+      <workItem from="1741248970085" duration="3245000" />
     </task>
     <task id="LOCAL-00001" summary="feat: Add Docker-Compose for DB, improve ef configs">
       <option name="closed" value="true" />
@@ -203,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741192102814</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="feat: add application">
+      <option name="closed" value="true" />
+      <created>1741195506762</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1741195506762</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
@@ -224,7 +231,8 @@
     <MESSAGE value="feat: Add Docker-Compose for DB, improve ef configs" />
     <MESSAGE value="feat: add volume control and SignalR hub for real-time updates" />
     <MESSAGE value="feat: implement media control endpoints" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: implement media control endpoints" />
+    <MESSAGE value="feat: add application" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add application" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

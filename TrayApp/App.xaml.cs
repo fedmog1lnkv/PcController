@@ -1,6 +1,4 @@
-﻿using Application.Services;
-using Domain.Entities;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,11 +6,13 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Windows;
 using System.Windows.Forms;
+using TrayApp.Hubs;
 
 namespace TrayApp
 {
@@ -22,6 +22,7 @@ namespace TrayApp
         private IHost _webHost;
         private MainWindow _mainWindow;
         private IConfiguration _configuration;
+        private BackgroundWorker _backgroundWorker;
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -29,13 +30,11 @@ namespace TrayApp
 
             _mainWindow = new MainWindow();
 
-            // Настройка конфигурации
             _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())                           // Путь к текущему каталогу
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Чтение из appsettings.json
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            // Настройка логирования
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
@@ -75,13 +74,7 @@ namespace TrayApp
                 var builder = WebApplication.CreateBuilder();
 
                 var hostingSettings = _configuration.GetSection("Hosting");
-                var ipAddress = hostingSettings.GetValue<string>("IpAddress");
-
-                if (string.IsNullOrEmpty(ipAddress))
-                {
-                    ipAddress = "0.0.0.0";
-                }
-
+                var ipAddress = hostingSettings.GetValue<string>("IpAddress") ?? "0.0.0.0";
                 var port = hostingSettings.GetValue<int>("Port");
 
                 builder.WebHost.ConfigureKestrel(
@@ -90,16 +83,9 @@ namespace TrayApp
                         options.Listen(IPAddress.Parse(ipAddress), port);
                     });
 
-                // Регистрация сервисов
-                builder.Services.AddSingleton<Settings>();
-                builder.Services.AddSingleton<ApplicationService>();
-                builder.Services.AddScoped<MediaService>();
-                builder.Services.AddScoped<VolumeService>();
-                builder.Services.AddControllers();
-                builder.Services.AddEndpointsApiExplorer();
-                builder.Services.AddSwaggerGen();
+                var startup = new Startup();
+                startup.ConfigureServices(builder.Services);
 
-                // Добавление Cors
                 builder.Services.AddCors(
                     options =>
                     {
@@ -113,18 +99,6 @@ namespace TrayApp
 
                 var webHost = builder.Build();
 
-                var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "images");
-
-                if (!Directory.Exists(imagesPath))
-                {
-                    Directory.CreateDirectory(imagesPath);
-                    Log.Information($"Папка '{imagesPath}' была успешно создана.");
-                }
-                else
-                {
-                    Log.Information($"Папка '{imagesPath}' уже существует.");
-                }
-
                 webHost.UseStaticFiles(
                     new StaticFileOptions
                     {
@@ -133,25 +107,20 @@ namespace TrayApp
                         RequestPath = "/images"
                     });
 
-                // Использование Swagger в режиме разработки
-                // if (webHost.Environment.IsDevelopment())
-                // {
-                webHost.UseSwagger();
-                webHost.UseSwaggerUI();
+                /*if (webHost.Environment.IsDevelopment())
+                {*/
+                    webHost.UseSwagger();
+                    webHost.UseSwaggerUI();
                 // }
 
                 webHost.UseHttpsRedirection();
                 webHost.UseAuthorization();
+                webHost.UseRouting();
 
-                // Добавление маршрутов для API
                 webHost.MapControllers();
+                webHost.MapHub<MainHub>("/hub");
 
-                // Добавление Cors
-                webHost.UseCors("AllowAll");
-
-                // Запуск приложения
                 await webHost.StartAsync();
-
                 return webHost;
             }
             catch (Exception ex)
@@ -165,14 +134,11 @@ namespace TrayApp
             }
         }
 
-        private async void Exit(object sender, EventArgs e)
+        private new async void Exit(object sender, EventArgs e)
         {
             _trayIcon.Visible = false;
 
-            if (_webHost != null)
-            {
-                await _webHost.StopAsync(TimeSpan.FromSeconds(5));
-            }
+            await _webHost.StopAsync(TimeSpan.FromSeconds(5));
 
             Current.Shutdown();
         }
